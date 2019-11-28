@@ -1,26 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useFirebase } from './hooks/useFirebase';
+import { useAuthentication } from './hooks/useAuthentication';
+import AuthUserContext from './hooks/useAuthentication/context';
 
-function App() {
+const App = () => {
+  const { firebase } = useFirebase();
+  console.log(firebase);
+  const { authUser } = useAuthentication();
+
+  console.log(authUser);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthUserContext.Provider value={authUser}>
+      <div>
+        <h1>Hi!</h1>
+      </div>
+    </AuthUserContext.Provider>
   );
-}
+};
 
 export default App;
