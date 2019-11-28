@@ -8,15 +8,17 @@ const reducer = (currentState, newState) => {
 };
 
 const SignInForm = props => {
+  // built in history hook from react-router allows us to move around the app
+  const history = useHistory();
+  // access to all firebase methods
+  const { firebase } = useFirebase();
+
+  // this handles setState just like this.setState
   const [state, setState] = useReducer(reducer, {
     email: '',
     password: '',
     error: null
   });
-  const history = useHistory();
-  const { firebase } = useFirebase();
-
-  console.log(firebase);
 
   const { email, password, error } = state;
 
@@ -46,6 +48,7 @@ const SignInForm = props => {
   return (
     <div className="row justify-content-center">
       <div className="col-md-6 col-12">
+        <h1>Sign In!</h1>
         <form onSubmit={onSubmit}>
           <div className="form-group">
             <input

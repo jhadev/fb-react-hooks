@@ -1,27 +1,37 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from '../Firebase';
+import React, { useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useFirebase } from '../../hooks/useFirebase';
 import * as ROUTES from '../../constants/routes';
 
-class SignUpFormBase extends Component {
-  state = {
+const reducer = (currentState, newState) => {
+  return { ...currentState, ...newState };
+};
+
+const SignUpForm = props => {
+  const { firebase } = useFirebase();
+  const history = useHistory();
+  const [state, setState] = useReducer(reducer, {
     username: '',
     email: '',
     passwordOne: '',
     passwordTwo: '',
     error: null
+  });
+
+  const { username, email, passwordOne, passwordTwo, error } = state;
+
+  const onChange = event => {
+    const { name, value } = event.target;
+    setState({ [name]: value });
   };
 
-  onSubmit = event => {
+  const onSubmit = event => {
     event.preventDefault();
 
-    const { email, passwordOne } = this.state;
-
-    this.props.firebase
+    firebase
       .doCreateUser(email, passwordOne)
       .then(authUser => {
-        this.setState({
+        setState({
           username: '',
           email: '',
           passwordOne: '',
@@ -29,35 +39,29 @@ class SignUpFormBase extends Component {
           error: null
         });
         // send them somewhere here
-        this.props.history.push(ROUTES.HOME);
+        history.push(ROUTES.HOME);
       })
       .catch(error => {
-        this.setState({ error });
+        setState({ error });
       });
   };
 
-  onChange = event => {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-  };
+  const isInvalid =
+    passwordOne !== passwordTwo ||
+    passwordOne === '' ||
+    email === '' ||
+    username === '';
 
-  render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
-
-    const isInvalid =
-      passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      email === '' ||
-      username === '';
-
-    return (
-      <form onSubmit={this.onSubmit}>
+  return (
+    <div>
+      <h1>Sign Up!</h1>
+      <form onSubmit={onSubmit}>
         <div className="form-group">
           <input
             className="form-control"
             name="username"
             value={username}
-            onChange={this.onChange}
+            onChange={onChange}
             type="text"
             placeholder="Full Name"
           />
@@ -67,7 +71,7 @@ class SignUpFormBase extends Component {
             className="form-control"
             name="email"
             value={email}
-            onChange={this.onChange}
+            onChange={onChange}
             type="text"
             placeholder="Email Address"
           />
@@ -77,7 +81,7 @@ class SignUpFormBase extends Component {
             className="form-control"
             name="passwordOne"
             value={passwordOne}
-            onChange={this.onChange}
+            onChange={onChange}
             type="password"
             placeholder="Password"
           />
@@ -87,7 +91,7 @@ class SignUpFormBase extends Component {
             className="form-control"
             name="passwordTwo"
             value={passwordTwo}
-            onChange={this.onChange}
+            onChange={onChange}
             type="password"
             placeholder="Confirm Password"
           />
@@ -98,10 +102,8 @@ class SignUpFormBase extends Component {
 
         {error && <p>{error.message}</p>}
       </form>
-    );
-  }
-}
-
-const SignUpForm = compose(withRouter, withFirebase)(SignUpFormBase);
+    </div>
+  );
+};
 
 export default SignUpForm;
