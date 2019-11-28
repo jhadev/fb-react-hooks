@@ -1,82 +1,84 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { withFirebase } from '../Firebase';
+import React, { useReducer } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useFirebase } from '../../hooks/useFirebase';
 import * as ROUTES from '../../constants/routes';
 
-class SignInFormBase extends Component {
-  state = {
+const reducer = (currentState, newState) => {
+  return { ...currentState, ...newState };
+};
+
+const SignInForm = props => {
+  const [state, setState] = useReducer(reducer, {
     email: '',
     password: '',
     error: null
-  };
+  });
+  const history = useHistory();
+  const { firebase } = useFirebase();
 
-  onChange = event => {
+  console.log(firebase);
+
+  const { email, password, error } = state;
+
+  const onChange = event => {
     const { name, value } = event.target;
 
-    this.setState({ [name]: value });
+    setState({ [name]: value });
   };
 
-  onSubmit = event => {
+  const onSubmit = event => {
     event.preventDefault();
-    const { email, password } = this.state;
     localStorage.setItem('email', email);
 
-    this.props.firebase
+    firebase
       .doSignInUser(email, password)
       .then(() => {
-        this.setState({ email: '', password: '', error: null });
-        this.props.history.push(ROUTES.HOME);
+        setState({ email: '', password: '', error: null });
+        history.push(ROUTES.HOME);
       })
       .catch(error => {
-        this.setState({ error });
+        setState({ error });
       });
   };
 
-  render() {
-    const { email, password, error } = this.state;
+  const isInvalid = password === '' || email === '';
 
-    const isInvalid = password === '' || email === '';
+  return (
+    <div className="row justify-content-center">
+      <div className="col-md-6 col-12">
+        <form onSubmit={onSubmit}>
+          <div className="form-group">
+            <input
+              className="form-control"
+              name="email"
+              value={email}
+              onChange={onChange}
+              type="text"
+              placeholder="Email Address"
+            />
+          </div>
+          <div className="form-group">
+            <input
+              className="form-control"
+              name="password"
+              value={password}
+              onChange={onChange}
+              type="password"
+              placeholder="Password"
+            />
+          </div>
+          <button
+            className="btn btn-primary mb-2"
+            disabled={isInvalid}
+            type="submit">
+            Sign In
+          </button>
 
-    return (
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-12">
-          <form onSubmit={this.onSubmit}>
-            <div className="form-group">
-              <input
-                className="form-control"
-                name="email"
-                value={email}
-                onChange={this.onChange}
-                type="text"
-                placeholder="Email Address"
-              />
-            </div>
-            <div className="form-group">
-              <input
-                className="form-control"
-                name="password"
-                value={password}
-                onChange={this.onChange}
-                type="password"
-                placeholder="Password"
-              />
-            </div>
-            <button
-              className="btn btn-primary mb-2"
-              disabled={isInvalid}
-              type="submit">
-              Sign In
-            </button>
-
-            {error && <p>{error.message}</p>}
-          </form>
-        </div>
+          {error && <p>{error.message}</p>}
+        </form>
       </div>
-    );
-  }
-}
-
-const SignInForm = compose(withRouter, withFirebase)(SignInFormBase);
+    </div>
+  );
+};
 
 export default SignInForm;
