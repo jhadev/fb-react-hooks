@@ -128,8 +128,10 @@ const SignUpForm = props => {
             type="submit">
             Sign Up
           </button>
-          {error && <p>{error.message}</p>}
         </div>
+        {error && (
+          <p className="m-2 text-red-500 text-xs bold">{error.message}</p>
+        )}
       </form>
     </div>
   );
