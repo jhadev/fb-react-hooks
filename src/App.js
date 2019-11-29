@@ -7,7 +7,6 @@ import Landing from './pages/Landing';
 import Yo404 from './pages/Yo404';
 import Home from './pages/Home';
 import * as ROUTES from './constants/routes';
-import './output.css'
 
 const App = () => {
   const { firebase } = useFirebase();
