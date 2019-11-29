@@ -53,57 +53,44 @@ const SignUpForm = props => {
     username === '';
 
   return (
-    <div>
-      <h1>Sign Up!</h1>
-      <form onSubmit={onSubmit}>
-        <div className="form-group">
-          <input
-            className="form-control"
-            name="username"
-            value={username}
-            onChange={onChange}
-            type="text"
-            placeholder="Full Name"
-          />
+    <div className="w-full max-w-xs">
+      <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={onSubmit}>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="full-name">
+            Full Name
+          </label>
+          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="full-name" name={username} onChange={onChange} type="text" placeholder="Full Name" />
         </div>
-        <div className="form-group">
-          <input
-            className="form-control"
-            name="email"
-            value={email}
-            onChange={onChange}
-            type="text"
-            placeholder="Email Address"
-          />
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+            Email
+          </label>
+          <input className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" name={email} onChange={onChange} type="text" placeholder="email" />
         </div>
-        <div className="form-group">
-          <input
-            className="form-control"
-            name="passwordOne"
-            value={passwordOne}
-            onChange={onChange}
-            type="password"
-            placeholder="Password"
-          />
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="passwordOne">
+            Password
+          </label>
+          <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name='passwordOne' onChange={onChange} id="passwordOne" type="password" placeholder="******************" />
+          <p className="text-red-500 text-xs italic">Please choose a password.</p>
         </div>
-        <div className="form-group">
-          <input
-            className="form-control"
-            name="passwordTwo"
-            value={passwordTwo}
-            onChange={onChange}
-            type="password"
-            placeholder="Confirm Password"
-          />
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="passwordTwo">
+            Confirm Password
+          </label>
+          <input className="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" name='passwordTwo' onChange={onChange} id="passwordTwo" type="password" placeholder="******************" />
+          <p className="text-red-500 text-xs italic">Confirm password</p>
         </div>
-        <button className="btn btn-primary" disabled={isInvalid} type="submit">
-          Sign Up
-        </button>
-
-        {error && <p>{error.message}</p>}
+        <div className="flex items-center justify-between">
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" disabled={isInvalid} type="submit">
+            Sign Up
+          </button>
+          {error && <p>{error.message}</p>}
+        </div>
       </form>
     </div>
   );
 };
 
 export default SignUpForm;
+

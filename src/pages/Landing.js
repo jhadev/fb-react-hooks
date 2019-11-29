@@ -4,11 +4,14 @@ import SignUpForm from '../components/SignUpForm';
 
 const Landing = () => {
   return (
-    // make separate pages for this. this is just for display
-    <>
+  <div className="flex flex-wrap">
+    <div className="w-1/4 ml-auto h-12">
       <SignUpForm />
-      <SignInForm />;
-    </>
+    </div>
+    <div className="w-1/4 mr-auto h-12">
+      <SignInForm />
+    </div>
+  </div>    
   );
 };
 
