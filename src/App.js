@@ -6,6 +6,9 @@ import AuthUserContext from './hooks/useAuthentication/context';
 import Landing from './pages/Landing';
 import Yo404 from './pages/Yo404';
 import Home from './pages/Home';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+import Navigation from './components/Navigation';
 import * as ROUTES from './constants/routes';
 
 const App = () => {
@@ -25,9 +28,12 @@ const App = () => {
   return (
     <AuthUserContext.Provider value={authUser}>
       <Router>
+        <Navigation />
         <Switch>
           <Route exact path={ROUTES.LANDING} component={Landing} />
           <Route path={ROUTES.HOME} component={Home} />
+          <Route path={ROUTES.SIGN_IN} component={SignIn} />
+          <Route path={ROUTES.SIGN_UP} component={SignUp} />
           <Route component={Yo404} />
         </Switch>
       </Router>
